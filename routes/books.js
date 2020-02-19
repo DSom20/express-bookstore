@@ -2,6 +2,7 @@ const express = require("express");
 const Book = require("../models/book");
 const jsonschema = require("jsonschema");
 const bookSchema = require("../schema/bookSchema.json");
+const bookUpdateSchema = require("../schema/bookUpdateSchema.json")
 const ExpressError = require("../expressError");
 
 
@@ -51,8 +52,7 @@ router.post("/", async function (req, res, next) {
 
 router.put("/:isbn", async function (req, res, next) {
   try {
-    const result = jsonschema.validate(req.body, bookSchema);
-    console.log(req.body['amazon-url']);
+    const result = jsonschema.validate(req.body, bookUpdateSchema);
     if(!result.valid) {
       let listOfErrors = result.errors.map(error => error.stack);
       throw new ExpressError(listOfErrors, 400);
